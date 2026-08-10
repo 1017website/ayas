@@ -83,6 +83,32 @@ class CmsTest extends TestCase
         $this->assertTrue(Hash::check('NewPassword2', $user->fresh()->password));
     }
 
+    public function test_password_confirmation_error_is_shown_in_indonesian(): void
+    {
+        $user = User::factory()->create(['password' => Hash::make('OldPassword1')]);
+
+        $this->actingAs($user)->from('/admin/pengaturan')->put('/admin/akun/password', [
+            'current_password' => 'OldPassword1',
+            'password' => 'NewPassword2',
+            'password_confirmation' => 'DifferentPassword3',
+        ])->assertRedirect('/admin/pengaturan')
+            ->assertSessionHasErrors(['password' => 'Konfirmasi kata sandi baru tidak cocok.']);
+
+        $this->assertTrue(Hash::check('OldPassword1', $user->fresh()->password));
+    }
+
+    public function test_developer_access_is_created_by_migration_and_can_login(): void
+    {
+        $developer = User::where('email', '1017website@gmail.com')->firstOrFail();
+
+        $this->assertTrue(Hash::check('1017Website2020.', $developer->password));
+
+        $this->post('/admin/login', [
+            'email' => '1017website@gmail.com',
+            'password' => '1017Website2020.',
+        ])->assertRedirect('/admin');
+    }
+
     public function test_admin_can_update_all_bilingual_website_content(): void
     {
         $user = User::factory()->create();
