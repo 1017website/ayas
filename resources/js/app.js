@@ -40,3 +40,29 @@ document.querySelectorAll('[data-product]').forEach(card => card.addEventListene
 }));
 document.querySelectorAll('[data-dialog-close]').forEach(button => button.addEventListener('click', () => dialog?.close()));
 dialog?.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+
+const adminSidebar = document.getElementById('adminSidebar');
+const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
+const sidebarCloseButtons = document.querySelectorAll('[data-sidebar-close]');
+const sidebarMedia = window.matchMedia('(max-width: 780px)');
+
+const setAdminSidebar = (open) => {
+    if (!adminSidebar || !sidebarToggle) return;
+
+    const mobileOpen = sidebarMedia.matches && open;
+    adminSidebar.classList.toggle('open', mobileOpen);
+    document.body.classList.toggle('sidebar-open', mobileOpen);
+    sidebarToggle.setAttribute('aria-expanded', String(mobileOpen));
+    sidebarToggle.setAttribute('aria-label', mobileOpen ? 'Tutup menu' : 'Buka menu');
+};
+
+sidebarToggle?.addEventListener('click', () => setAdminSidebar(!adminSidebar?.classList.contains('open')));
+sidebarCloseButtons.forEach(button => button.addEventListener('click', () => setAdminSidebar(false)));
+adminSidebar?.querySelectorAll('nav a').forEach(link => link.addEventListener('click', () => setAdminSidebar(false)));
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && adminSidebar?.classList.contains('open')) {
+        setAdminSidebar(false);
+        sidebarToggle?.focus();
+    }
+});
+sidebarMedia.addEventListener('change', () => setAdminSidebar(false));

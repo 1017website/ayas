@@ -67,7 +67,9 @@ class CmsTest extends TestCase
         $this->actingAs($user)->get('/admin/pengaturan')
             ->assertSee('data-settings-tab="media"', false)
             ->assertSee('data-settings-panel', false)
-            ->assertSee('data-settings-tab="section-footer"', false);
+            ->assertSee('data-settings-tab="section-footer"', false)
+            ->assertSee('data-sidebar-toggle', false)
+            ->assertSee('data-sidebar-close', false);
     }
 
     public function test_admin_can_change_password(): void

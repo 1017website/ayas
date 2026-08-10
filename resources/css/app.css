@@ -35,3 +35,6 @@ footer{padding:27px 0;background:#05172d;color:#ffffff80}footer .container{displ
 
 /* Keep every CMS navigation action reachable on short laptop/tablet screens. */
 .admin-sidebar{min-height:0}.admin-logo,.sidebar-bottom{flex:none}.admin-sidebar nav{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-color:#ffffff33 transparent;scrollbar-width:thin}.admin-sidebar nav::-webkit-scrollbar{width:5px}.admin-sidebar nav::-webkit-scrollbar-thumb{border-radius:99px;background:#ffffff33}.admin-sidebar nav>a{flex:none}.sidebar-bottom{margin-top:14px}
+
+.sidebar-close,.sidebar-backdrop{display:none}
+@media(max-width:780px){.admin-sidebar{width:min(250px,calc(100vw - 56px));box-shadow:18px 0 55px #03132655}.sidebar-close{position:absolute;top:13px;right:13px;z-index:2;display:grid;width:36px;height:36px;place-items:center;border:1px solid #ffffff20;border-radius:50%;background:#ffffff10;color:white;font-size:24px;line-height:1;cursor:pointer}.sidebar-backdrop{position:fixed;inset:0;z-index:140;display:block;border:0;background:#03132699;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s,visibility .3s}.admin-body.sidebar-open{overflow:hidden}.admin-body.sidebar-open .sidebar-backdrop{opacity:1;visibility:visible;pointer-events:auto}}
