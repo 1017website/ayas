@@ -221,10 +221,6 @@
     }
     .hero__stat strong { display:block; font-family:"Playfair Display",serif; font-size:26px; color:var(--gold-light); }
     .hero__stat span { font-size:10px; letter-spacing:.11em; text-transform:uppercase; color:rgba(255,255,255,.62); }
-    .scroll-cue { position:absolute; left:48px; bottom:38px; z-index:4; display:flex; align-items:center; gap:12px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.52); transform:rotate(-90deg); transform-origin:left center; }
-    .scroll-cue::before { content:""; width:46px; height:1px; background:var(--gold); animation:scrollLine 1.8s ease-in-out infinite; }
-    @keyframes scrollLine { 50% { transform:scaleX(.45); transform-origin:right; } }
-
     /* MARQUEE */
     .marquee { overflow:hidden; background:var(--gold); color:var(--navy); border-block:1px solid rgba(7,31,61,.15); }
     .marquee__track { display:flex; width:max-content; animation:marquee 24s linear infinite; }
@@ -432,7 +428,6 @@
       .hero__eyebrow { margin-bottom:20px; }
       .hero h1 { max-width:680px; font-size:clamp(56px,6.3vw,86px); }
       .hero__text { margin:22px 0 26px; font-size:16px; line-height:1.6; }
-      .scroll-cue { display:none; }
       .hero__stats { right:28px; bottom:26px; padding:15px 18px; }
     }
 
@@ -465,7 +460,6 @@
       .hero h1 { font-size:clamp(54px,14vw,82px); max-width:680px; }
       .hero__text { max-width:540px; }
       .hero__stats { display:none; }
-      .scroll-cue { display:none; }
       .about__grid { gap:18px; }
       .about__visual { min-height:470px; }
       .values { grid-template-columns:1fr; }
@@ -593,7 +587,6 @@
         <div class="hero__stat"><strong>{{ $details['stat_2_value'] }}</strong><span data-i18n="marketReach">Market reach</span></div>
         <div class="hero__stat"><strong>{{ $details['stat_3_value'] }}</strong><span data-i18n="productLines">Product lines</span></div>
       </div>
-      <div class="scroll-cue" data-i18n="scrollDiscover">Scroll to discover</div>
     </section>
 
     <div class="marquee" aria-hidden="true">

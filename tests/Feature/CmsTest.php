@@ -141,7 +141,11 @@ class CmsTest extends TestCase
     {
         $response = $this->withHeader('User-Agent', 'Mozilla/5.0 Chrome/120.0')->get('/?utm_source=google&utm_campaign=brand');
 
-        $response->assertOk()->assertCookie('ayas_visitor')->assertSee('property="og:title"', false)->assertSee('rel="canonical"', false);
+        $response->assertOk()
+            ->assertCookie('ayas_visitor')
+            ->assertSee('property="og:title"', false)
+            ->assertSee('rel="canonical"', false)
+            ->assertDontSee('class="scroll-cue"', false);
         $this->assertDatabaseHas('page_views', ['path' => '/', 'source' => 'google', 'campaign' => 'brand']);
         $this->assertNotNull(PageView::first()?->ip_hash);
     }
