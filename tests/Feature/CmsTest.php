@@ -60,7 +60,7 @@ class CmsTest extends TestCase
     {
         $user = User::factory()->create();
 
-        foreach (['/admin', '/admin/produk', '/admin/produk/create', '/admin/berita', '/admin/berita/create', '/admin/pesan', '/admin/statistik', '/admin/pengaturan'] as $url) {
+        foreach (['/admin', '/admin/produk', '/admin/produk/create', '/admin/berita', '/admin/berita/create', '/admin/pesan', '/admin/statistik', '/admin/pengaturan', '/admin/akun'] as $url) {
             $this->actingAs($user)->get($url)->assertOk();
         }
 
@@ -80,20 +80,27 @@ class CmsTest extends TestCase
             'current_password' => 'OldPassword1',
             'password' => 'NewPassword2',
             'password_confirmation' => 'NewPassword2',
-        ])->assertSessionHas('success');
+        ])->assertRedirect('/admin/akun')
+            ->assertSessionHas('success');
 
         $this->assertTrue(Hash::check('NewPassword2', $user->fresh()->password));
+
+        $this->post('/admin/logout');
+        $this->post('/admin/login', ['email' => $user->email, 'password' => 'OldPassword1'])
+            ->assertSessionHasErrors('email');
+        $this->post('/admin/login', ['email' => $user->email, 'password' => 'NewPassword2'])
+            ->assertRedirect('/admin');
     }
 
     public function test_password_confirmation_error_is_shown_in_indonesian(): void
     {
         $user = User::factory()->create(['password' => Hash::make('OldPassword1')]);
 
-        $this->actingAs($user)->from('/admin/pengaturan')->put('/admin/akun/password', [
+        $this->actingAs($user)->from('/admin/akun')->put('/admin/akun/password', [
             'current_password' => 'OldPassword1',
             'password' => 'NewPassword2',
             'password_confirmation' => 'DifferentPassword3',
-        ])->assertRedirect('/admin/pengaturan')
+        ])->assertRedirect('/admin/akun')
             ->assertSessionHasErrors(['password' => 'Konfirmasi kata sandi baru tidak cocok.']);
 
         $this->assertTrue(Hash::check('OldPassword1', $user->fresh()->password));

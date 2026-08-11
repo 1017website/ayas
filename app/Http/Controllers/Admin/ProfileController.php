@@ -7,9 +7,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function edit(): View
+    {
+        return view('admin.profile.edit');
+    }
+
     public function password(Request $request): RedirectResponse
     {
         $data = $request->validate([
@@ -25,8 +31,14 @@ class ProfileController extends Controller
             'password.numbers' => 'Kata sandi baru harus mengandung minimal satu angka.',
         ]);
 
-        $request->user()->update(['password' => Hash::make($data['password'])]);
+        $request->user()->forceFill([
+            'password' => Hash::make($data['password']),
+            'remember_token' => null,
+        ])->save();
 
-        return back()->with('success', 'Kata sandi akun berhasil diperbarui.');
+        $request->session()->regenerate();
+
+        return redirect()->route('admin.profile.edit')
+            ->with('success', 'Kata sandi akun berhasil diperbarui. Silakan gunakan kata sandi baru saat login berikutnya.');
     }
 }

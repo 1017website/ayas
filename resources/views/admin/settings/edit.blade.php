@@ -64,8 +64,6 @@
   <div class="sticky-save"><p><b>Siap menyimpan perubahan?</b><span>Konten akan langsung mengikuti desain frontend asli.</span></p><button class="primary-button" type="submit">Simpan Semua Perubahan</button></div>
 </form>
 
-<form class="admin-form password-form" method="post" action="{{ route('admin.profile.password') }}">@csrf @method('PUT')<section class="admin-card"><div class="form-section-title"><span>⌁</span><div><h3>Keamanan akun</h3><p>Ganti kata sandi admin secara berkala.</p></div></div><div class="fields"><label>Kata sandi saat ini<input type="password" name="current_password" autocomplete="current-password" required></label><span></span><label>Kata sandi baru<input type="password" name="password" autocomplete="new-password" required><small>Minimal 8 karakter, huruf besar, kecil, dan angka.</small></label><label>Ulangi kata sandi baru<input type="password" name="password_confirmation" autocomplete="new-password" required></label></div><button class="secondary-button password-button" type="submit">Perbarui Kata Sandi</button></section></form>
-
 <script>
 (() => {
   const form = document.querySelector('.settings-form');

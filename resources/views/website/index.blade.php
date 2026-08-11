@@ -32,7 +32,7 @@
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: clip; }
     body {
       margin: 0;
       color: var(--ink);
@@ -235,7 +235,8 @@
 
     /* ABOUT */
     .about { background:var(--paper); }
-    .about__head { display:grid; grid-template-columns: .72fr 1.28fr; gap:75px; align-items:start; margin-bottom:80px; }
+    .about__head { display:grid; grid-template-columns: 1.15fr .85fr; gap:75px; align-items:end; margin-bottom:80px; }
+    .about__headline { display:grid; gap:34px; }
     .about__intro { font-size:clamp(32px,4vw,58px); line-height:1.12; }
     .about__intro em { color:var(--gold); }
     .about__copy { max-width:560px; margin-left:auto; padding-top:12px; font-size:17px; line-height:1.8; color:var(--muted); }
@@ -425,6 +426,16 @@
       .contact__panel { grid-template-columns:1fr; }
     }
 
+    @media (min-width: 821px) and (max-height: 850px) {
+      .hero { min-height:720px; }
+      .hero__content { padding-top:72px; }
+      .hero__eyebrow { margin-bottom:20px; }
+      .hero h1 { max-width:680px; font-size:clamp(56px,6.3vw,86px); }
+      .hero__text { margin:22px 0 26px; font-size:16px; line-height:1.6; }
+      .scroll-cue { display:none; }
+      .hero__stats { right:28px; bottom:26px; padding:15px 18px; }
+    }
+
     @media (max-width: 820px) {
       .container { width:min(100% - 32px, 1180px); }
       .section { padding:86px 0; }
@@ -599,13 +610,11 @@
     <section class="section about" id="about">
       <div class="container">
         <div class="about__head">
-          <div data-reveal="left">
+          <div class="about__headline" data-reveal="left">
             <div class="eyebrow" style="color:var(--gold)" data-i18n="aboutLabel">Who We Are</div>
+            <h2 class="display about__intro" data-i18n-html="aboutTitle">Built to make food sourcing feel <em>simple, dependable, and personal.</em></h2>
           </div>
-          <div>
-            <h2 class="display about__intro" data-reveal data-i18n-html="aboutTitle">Built to make food sourcing feel <em>simple, dependable, and personal.</em></h2>
-            <p class="about__copy" data-reveal data-delay="1" data-i18n="aboutCopy">We combine responsive service, carefully selected products, and consistent delivery to help our customers focus on serving their guests and growing their business.</p>
-          </div>
+          <p class="about__copy" data-reveal="right" data-delay="1" data-i18n="aboutCopy">We combine responsive service, carefully selected products, and consistent delivery to help our customers focus on serving their guests and growing their business.</p>
         </div>
 
         <div class="about__grid">

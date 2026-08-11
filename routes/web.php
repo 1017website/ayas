@@ -30,6 +30,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/statistik', AnalyticsController::class)->name('analytics');
         Route::get('/pengaturan', [SettingController::class, 'edit'])->name('settings.edit');
         Route::put('/pengaturan', [SettingController::class, 'update'])->name('settings.update');
+        Route::get('/akun', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/akun/password', [ProfileController::class, 'password'])->name('profile.password');
         Route::resource('produk', AdminProductController::class)->parameters(['produk' => 'product']);
         Route::resource('berita', AdminPostController::class)->parameters(['berita' => 'post']);

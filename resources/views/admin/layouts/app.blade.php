@@ -2,7 +2,7 @@
 <body class="admin-body">
 <aside class="admin-sidebar" id="adminSidebar"><button class="sidebar-close" type="button" data-sidebar-close aria-label="Tutup menu">&times;</button><a class="admin-logo" href="{{ route('admin.dashboard') }}"><img src="{{ asset('assets/logo-white.png') }}" alt="AYAS FOODLINK"><span>Content Manager</span></a>
 <nav><small>RUANG KERJA</small>
-@php($items=[['admin.dashboard','⌂','Ringkasan'],['admin.produk.index','◇','Produk'],['admin.berita.index','▤','Berita'],['admin.inquiries.index','✉','Pesan Masuk'],['admin.analytics','↗','Statistik'],['admin.settings.edit','⚙','Pengaturan']])
+@php($items=[['admin.dashboard','⌂','Ringkasan'],['admin.produk.index','◇','Produk'],['admin.berita.index','▤','Berita'],['admin.inquiries.index','✉','Pesan Masuk'],['admin.analytics','↗','Statistik'],['admin.settings.edit','⚙','Pengaturan'],['admin.profile.edit','♙','Akun']])
 @foreach($items as [$route,$icon,$label])<a href="{{ route($route) }}" @class(['active'=>request()->routeIs(str_replace('.index','.*',$route)) || request()->routeIs($route)])><i>{{ $icon }}</i><span>{{ $label }}</span>@if($route==='admin.inquiries.index' && ($sidebarNewCount ?? 0)>0)<b>{{ $sidebarNewCount }}</b>@endif</a>@endforeach
 </nav><div class="sidebar-bottom"><a href="{{ route('home') }}" target="_blank">↗ <span>Lihat website</span></a><form action="{{ route('admin.logout') }}" method="post">@csrf<button type="submit">⇥ <span>Keluar</span></button></form></div></aside>
 <button class="sidebar-backdrop" type="button" data-sidebar-close aria-label="Tutup menu"></button>
