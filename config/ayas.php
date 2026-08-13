@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'developer_email' => env('AYAS_DEVELOPER_EMAIL', '1017website@gmail.com'),
     'content_sections' => [
         'Navigasi & Tombol' => [
             'loaderLabel' => ['label' => 'Teks Loading', 'en' => 'Preparing quality experience', 'id' => 'Menyiapkan pengalaman terbaik'],

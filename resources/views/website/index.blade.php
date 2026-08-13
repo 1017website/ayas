@@ -327,7 +327,8 @@
     .contact__text { max-width:500px; margin:0 0 34px; color:rgba(255,255,255,.67); line-height:1.75; font-size:16px; }
     .contact__details { display:grid; gap:18px; }
     .contact__detail { display:grid; grid-template-columns:42px 1fr; gap:14px; align-items:start; }
-    .contact__icon { display:grid; place-items:center; width:42px; height:42px; border:1px solid rgba(200,149,67,.32); border-radius:50%; color:var(--gold-light); font-size:16px; }
+    .contact__icon { display:grid; place-items:center; width:42px; height:42px; border:1px solid rgba(200,149,67,.32); border-radius:50%; color:var(--gold-light); }
+    .contact__icon svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
     .contact__label { display:block; margin-bottom:4px; font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-light); }
     .contact__value { color:rgba(255,255,255,.76); line-height:1.6; font-size:14px; }
     .contact__value a:hover { color:var(--gold-light); }
@@ -723,11 +724,11 @@
           <h2 class="display" data-i18n-html="contactTitle">Let’s support your business with <em>better supply.</em></h2>
           <p class="contact__text" data-i18n="contactText">Tell us what your business needs. Our team will respond with suitable product and supply information.</p>
           <div class="contact__details">
-            <div class="contact__detail"><span class="contact__icon" aria-hidden="true">⌖</span><div><span class="contact__label" data-i18n="addressLabel">Address</span><div class="contact__value">{{ $details['address'] }}</div></div></div>
-            <div class="contact__detail"><span class="contact__icon" aria-hidden="true">☎</span><div><span class="contact__label" data-i18n="phoneLabel">Phone / WhatsApp</span><div class="contact__value"><a href="tel:+{{ $details['whatsapp'] }}">{{ $details['phone'] }}</a></div></div></div>
-            <div class="contact__detail"><span class="contact__icon" aria-hidden="true">@</span><div><span class="contact__label" data-i18n="emailLabel">Email</span><div class="contact__value"><a href="mailto:{{ $details['email'] }}">{{ $details['email'] }}</a></div></div></div>
-            <div class="contact__detail"><span class="contact__icon" aria-hidden="true">◎</span><div><span class="contact__label">Instagram</span><div class="contact__value"><a href="{{ $details['instagram_url'] }}" target="_blank" rel="noopener">{{ $details['instagram'] }}</a></div></div></div>
-            <div class="contact__detail"><span class="contact__icon" aria-hidden="true">◎</span><div><span class="contact__label" data-i18n="websiteLabel">Website</span><div class="contact__value"><a href="#home">{{ $details['website'] }}</a></div></div></div>
+            <div class="contact__detail"><span class="contact__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><span class="contact__label" data-i18n="addressLabel">Address</span><div class="contact__value">{{ $details['address'] }}</div></div></div>
+            <div class="contact__detail"><span class="contact__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92Z"/></svg></span><div><span class="contact__label" data-i18n="phoneLabel">Phone / WhatsApp</span><div class="contact__value"><a href="tel:+{{ $details['whatsapp'] }}">{{ $details['phone'] }}</a></div></div></div>
+            <div class="contact__detail"><span class="contact__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><div><span class="contact__label" data-i18n="emailLabel">Email</span><div class="contact__value"><a href="mailto:{{ $details['email'] }}">{{ $details['email'] }}</a></div></div></div>
+            <div class="contact__detail"><span class="contact__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg></span><div><span class="contact__label">Instagram</span><div class="contact__value"><a href="{{ $details['instagram_url'] }}" target="_blank" rel="noopener">{{ $details['instagram'] }}</a></div></div></div>
+            <div class="contact__detail"><span class="contact__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></span><div><span class="contact__label" data-i18n="websiteLabel">Website</span><div class="contact__value"><a href="#home">{{ $details['website'] }}</a></div></div></div>
           </div>
         </div>
 

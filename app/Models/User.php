@@ -46,4 +46,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isDeveloper(): bool
+    {
+        return strcasecmp($this->email, (string) config('ayas.developer_email')) === 0;
+    }
 }

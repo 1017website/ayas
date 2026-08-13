@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -100,6 +101,34 @@ class CmsTest extends TestCase
             ->assertSee('data-settings-tab="section-footer"', false)
             ->assertSee('data-sidebar-toggle', false)
             ->assertSee('data-sidebar-close', false);
+
+        $this->actingAs($user)->get('/admin/produk/create')
+            ->assertSee('product-media-grid', false)
+            ->assertSeeInOrder(['Informasi produk', 'Media produk', 'Foto galeri 4']);
+    }
+
+    public function test_developer_tools_are_restricted_to_the_developer_account(): void
+    {
+        $administrator = User::factory()->create();
+        $this->actingAs($administrator)->get('/admin/developer')->assertForbidden();
+        $this->actingAs($administrator)->get('/admin')->assertDontSee('>Developer<', false);
+
+        $developer = User::where('email', config('ayas.developer_email'))->firstOrFail();
+        $this->actingAs($developer)->get('/admin/developer')
+            ->assertOk()
+            ->assertSee('Migrate')
+            ->assertSee('Optimize clear')
+            ->assertSee('Storage link');
+    }
+
+    public function test_developer_can_run_an_allowlisted_maintenance_tool(): void
+    {
+        Artisan::shouldReceive('call')->once()->with('optimize:clear', [])->andReturn(0);
+        $developer = User::where('email', config('ayas.developer_email'))->firstOrFail();
+
+        $this->actingAs($developer)->post('/admin/developer/run', ['tool' => 'optimize-clear'])
+            ->assertRedirect()
+            ->assertSessionHas('success');
     }
 
     public function test_admin_can_change_password(): void

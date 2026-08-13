@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DeveloperToolController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -32,6 +33,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/pengaturan', [SettingController::class, 'update'])->name('settings.update');
         Route::get('/akun', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/akun/password', [ProfileController::class, 'password'])->name('profile.password');
+        Route::middleware('developer')->group(function () {
+            Route::get('/developer', [DeveloperToolController::class, 'index'])->name('developer.index');
+            Route::post('/developer/run', [DeveloperToolController::class, 'run'])->middleware('throttle:6,1')->name('developer.run');
+        });
         Route::resource('produk', AdminProductController::class)->parameters(['produk' => 'product']);
         Route::resource('berita', AdminPostController::class)->parameters(['berita' => 'post']);
         Route::get('/pesan', [AdminInquiryController::class, 'index'])->name('inquiries.index');
