@@ -32,8 +32,10 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
         }
-        if ($request->hasFile('gallery_image')) {
-            $data['gallery_image'] = $request->file('gallery_image')->store('products', 'public');
+        foreach ($this->galleryFields() as $field) {
+            if ($request->hasFile($field)) {
+                $data[$field] = $request->file($field)->store('products', 'public');
+            }
         }
         Product::create($data);
 
@@ -61,11 +63,11 @@ class ProductController extends Controller
             }
             $data['image'] = $request->file('image')->store('products', 'public');
         }
-        if ($request->hasFile('gallery_image')) {
-            if ($product->gallery_image && ! str_starts_with($product->gallery_image, 'assets/')) {
-                Storage::disk('public')->delete($product->gallery_image);
+        foreach ($this->galleryFields() as $field) {
+            if ($request->hasFile($field)) {
+                $this->deleteStoredImage($product->$field);
+                $data[$field] = $request->file($field)->store('products', 'public');
             }
-            $data['gallery_image'] = $request->file('gallery_image')->store('products', 'public');
         }
         $product->update($data);
 
@@ -77,8 +79,8 @@ class ProductController extends Controller
         if ($product->image && ! str_starts_with($product->image, 'assets/')) {
             Storage::disk('public')->delete($product->image);
         }
-        if ($product->gallery_image && ! str_starts_with($product->gallery_image, 'assets/')) {
-            Storage::disk('public')->delete($product->gallery_image);
+        foreach ($this->galleryFields() as $field) {
+            $this->deleteStoredImage($product->$field);
         }
         $product->delete();
 
@@ -93,8 +95,23 @@ class ProductController extends Controller
             'short_description' => ['required', 'string', 'max:400'], 'short_description_id' => ['required', 'string', 'max:400'],
             'description' => ['nullable', 'string', 'max:5000'], 'description_id' => ['nullable', 'string', 'max:5000'],
             'image_url' => ['nullable', 'url', 'max:1000'], 'sort_order' => ['required', 'integer', 'min:0', 'max:999'],
-            'image' => ['nullable', 'image', 'max:4096'], 'gallery_image' => ['nullable', 'image', 'max:4096'],
+            'image' => ['nullable', 'image', 'max:4096'],
+            'gallery_image' => ['nullable', 'image', 'max:4096'],
+            'gallery_image_3' => ['nullable', 'image', 'max:4096'],
+            'gallery_image_4' => ['nullable', 'image', 'max:4096'],
         ]);
+    }
+
+    private function galleryFields(): array
+    {
+        return ['gallery_image', 'gallery_image_3', 'gallery_image_4'];
+    }
+
+    private function deleteStoredImage(?string $path): void
+    {
+        if ($path && ! str_starts_with($path, 'assets/')) {
+            Storage::disk('public')->delete($path);
+        }
     }
 
     private function uniqueSlug(string $name, ?int $ignore = null): string

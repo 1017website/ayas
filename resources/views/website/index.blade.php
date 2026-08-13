@@ -40,40 +40,12 @@
       font-family: "DM Sans", sans-serif;
       overflow-x: hidden;
     }
-    body.is-loading { overflow: hidden; }
     img { max-width: 100%; display: block; }
     a { color: inherit; text-decoration: none; }
     button, input, textarea, select { font: inherit; }
     button { border: 0; }
     ::selection { background: var(--gold); color: var(--navy); }
     .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-
-    /* LOADING PAGE */
-    .loader {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: grid;
-      place-items: center;
-      background: var(--navy);
-      color: var(--white);
-      transition: opacity .8s var(--ease), visibility .8s var(--ease);
-    }
-    .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-    .loader__inner { width: min(470px, 78vw); text-align: center; }
-    .loader__logo {
-      width: min(340px, 72vw);
-      margin: 0 auto 38px;
-      opacity: 0;
-      transform: translateY(16px) scale(.96);
-      animation: loaderLogo 1s .15s var(--ease) forwards;
-    }
-    .loader__meta { display: flex; justify-content: space-between; gap: 20px; align-items: center; }
-    .loader__label { font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: rgba(255,255,255,.62); }
-    .loader__number { font-family: "Playfair Display", serif; font-size: 28px; color: var(--gold-light); }
-    .loader__track { height: 2px; margin-top: 14px; background: rgba(255,255,255,.14); overflow: hidden; }
-    .loader__bar { height: 100%; width: 0; background: linear-gradient(90deg,var(--gold),var(--gold-light)); }
-    @keyframes loaderLogo { to { opacity: 1; transform: none; } }
 
     /* UTILITIES */
     .container { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
@@ -196,11 +168,11 @@
     @keyframes heroZoom { to { transform: scale(1); } }
     .hero__grain { position:absolute; inset:0; pointer-events:none; opacity:.06; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E"); }
     .hero__content { position: relative; z-index: 3; padding-top: 100px; width: min(700px, 60%); }
-    .hero__eyebrow { color: var(--gold-light); margin-bottom: 34px; opacity:0; transform:translateY(18px); animation: heroIn .8s 1.7s var(--ease) forwards; }
-    .hero h1 { font-size: clamp(58px, 7.6vw, 112px); max-width: 760px; opacity:0; transform:translateY(35px); animation: heroIn 1s 1.85s var(--ease) forwards; }
+    .hero__eyebrow { color: var(--gold-light); margin-bottom: 34px; opacity:0; transform:translateY(18px); animation: heroIn .8s .1s var(--ease) forwards; }
+    .hero h1 { font-size: clamp(58px, 7.6vw, 112px); max-width: 760px; opacity:0; transform:translateY(35px); animation: heroIn 1s .2s var(--ease) forwards; }
     .hero h1 em { color: var(--gold-light); font-weight:500; }
-    .hero__text { max-width: 565px; margin: 30px 0 38px; font-size: clamp(16px,1.4vw,19px); line-height:1.75; color:rgba(255,255,255,.72); opacity:0; transform:translateY(25px); animation:heroIn .9s 2.05s var(--ease) forwards; }
-    .hero__actions { display:flex; flex-wrap:wrap; gap:14px; opacity:0; transform:translateY(25px); animation:heroIn .9s 2.2s var(--ease) forwards; }
+    .hero__text { max-width: 565px; margin: 30px 0 38px; font-size: clamp(16px,1.4vw,19px); line-height:1.75; color:rgba(255,255,255,.72); opacity:0; transform:translateY(25px); animation:heroIn .9s .35s var(--ease) forwards; }
+    .hero__actions { display:flex; flex-wrap:wrap; gap:14px; opacity:0; transform:translateY(25px); animation:heroIn .9s .5s var(--ease) forwards; }
     @keyframes heroIn { to { opacity:1; transform:none; } }
     .hero__stats {
       position:absolute;
@@ -217,7 +189,7 @@
       border-radius:18px;
       opacity:0;
       transform:translateY(20px);
-      animation:heroIn .8s 2.4s var(--ease) forwards;
+      animation:heroIn .8s .65s var(--ease) forwards;
     }
     .hero__stat strong { display:block; font-family:"Playfair Display",serif; font-size:26px; color:var(--gold-light); }
     .hero__stat span { font-size:10px; letter-spacing:.11em; text-transform:uppercase; color:rgba(255,255,255,.62); }
@@ -263,6 +235,8 @@
     .product-card:nth-child(2){ grid-column:span 5; grid-row:span 4; }
     .product-card:nth-child(3){ grid-column:span 5; grid-row:span 5; }
     .product-card:nth-child(4){ grid-column:span 7; grid-row:span 3; }
+    .product-grid--extended { grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); grid-auto-rows:360px; }
+    .product-grid--extended .product-card:nth-child(n) { grid-column:auto; grid-row:auto; }
     .product-card img { width:100%; height:100%; object-fit:cover; transition:transform .9s var(--ease), filter .6s var(--ease); }
     .product-card::after { content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg,rgba(7,31,61,.03) 30%,rgba(7,31,61,.88) 100%); }
     .product-card:hover img { transform:scale(1.07); filter:saturate(1.08); }
@@ -283,6 +257,7 @@
     .product-modal__slide { flex:0 0 100%; min-width:100%; height:100%; scroll-snap-align:start; }
     .product-modal__slide img { width:100%; height:100%; object-fit:cover; pointer-events:none; user-select:none; }
     .product-modal__controls { position:absolute; left:50%; bottom:18px; z-index:3; display:flex; align-items:center; gap:10px; padding:7px; border-radius:999px; background:rgba(7,31,61,.78); backdrop-filter:blur(10px); transform:translateX(-50%); }
+    .product-modal__controls[hidden] { display:none; }
     .product-modal__control { display:grid; place-items:center; width:36px; height:36px; border-radius:50%; color:white; background:rgba(255,255,255,.12); font-size:19px; cursor:pointer; }
     .product-modal__control:hover { color:var(--navy); background:var(--gold-light); }
     .product-modal__count { min-width:34px; color:white; text-align:center; font-size:11px; font-weight:700; letter-spacing:.08em; }
@@ -309,8 +284,9 @@
     .capabilities__copy > p { color:var(--muted); font-size:17px; line-height:1.8; max-width:560px; }
     .metric-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin:42px 0; }
     .metric { padding:24px 0; border-top:1px solid var(--line); }
-    .metric strong { display:block; font-family:"Playfair Display",serif; font-size:45px; color:var(--gold); }
-    .metric span { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+    .metric strong { display:flex; align-items:baseline; min-height:54px; font-family:"Playfair Display",serif; font-size:45px; line-height:1.1; color:var(--gold); }
+    .metric strong .counter { font:inherit; letter-spacing:inherit; text-transform:none; color:inherit; }
+    .metric > span { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
 
     /* PROCESS */
     .process { background:white; }
@@ -523,19 +499,8 @@
     }
   </style>
 </head>
-<body class="is-loading">
+<body>
   @include('website.partials.tracking-body')
-  <div class="loader" id="loader" aria-label="Loading AYAS FOODLINK website">
-    <div class="loader__inner">
-      <img class="loader__logo" src="{{ $media['logo'] }}" alt="AYAS FOODLINK">
-      <div class="loader__meta">
-        <span class="loader__label" data-i18n="loaderLabel">Preparing quality experience</span>
-        <span class="loader__number" id="loaderNumber">0%</span>
-      </div>
-      <div class="loader__track"><div class="loader__bar" id="loaderBar"></div></div>
-    </div>
-  </div>
-
   <header class="header" id="header">
     <div class="container nav">
       <a class="brand" href="#home" aria-label="AYAS FOODLINK home">
@@ -649,14 +614,15 @@
           <p data-reveal="right" data-i18n="productsCopy">From locally supplied favourites to export-ready products, our range is selected to deliver quality, convenience, and dependable performance.</p>
         </div>
 
-        <div class="product-grid">
+        <div @class(['product-grid', 'product-grid--extended' => $products->count() > 4])>
           @foreach($products as $index => $product)
             @php
               $fallback = $product->image ? (str_starts_with($product->image, 'assets/') ? asset($product->image) : asset('storage/'.$product->image)) : asset('assets/images/hero-fallback.jpg');
               $primary = $product->image_url ?: $fallback;
-              $gallery = $product->gallery_image ? (str_starts_with($product->gallery_image, 'assets/') ? asset($product->gallery_image) : asset('storage/'.$product->gallery_image)) : $fallback;
+              $resolveProductImage = fn ($path) => $path ? (str_starts_with($path, 'assets/') ? asset($path) : asset('storage/'.$path)) : null;
+              $galleryImages = array_values(array_filter([$primary, $resolveProductImage($product->gallery_image), $resolveProductImage($product->gallery_image_3), $resolveProductImage($product->gallery_image_4)]));
             @endphp
-            <button class="product-card" type="button" data-reveal="{{ $index % 3 === 0 ? 'left' : 'right' }}" data-gallery-alt="{{ $gallery }}" data-description-en="{{ $product->description ?: $product->short_description }}" data-description-id="{{ $product->description_id ?: $product->short_description_id ?: $product->short_description }}" aria-haspopup="dialog" aria-label="View {{ $product->name }} details">
+            <button class="product-card" type="button" data-reveal="{{ $index % 3 === 0 ? 'left' : 'right' }}" data-gallery-images="{{ base64_encode(json_encode($galleryImages, JSON_UNESCAPED_SLASHES)) }}" data-gallery-fallback="{{ $fallback }}" data-description-en="{{ $product->description ?: $product->short_description }}" data-description-id="{{ $product->description_id ?: $product->short_description_id ?: $product->short_description }}" aria-haspopup="dialog" aria-label="View {{ $product->name }} details">
               <img src="{{ $primary }}" alt="{{ $product->name }}" loading="lazy" onerror="this.onerror=null;this.src='{{ $fallback }}'">
               <div class="product-card__info"><div><h3 data-content-en="{{ $product->name }}" data-content-id="{{ $product->name_id ?: $product->name }}">{{ $product->name }}</h3><p data-content-en="{{ $product->short_description }}" data-content-id="{{ $product->short_description_id ?: $product->short_description }}">{{ $product->short_description }}</p></div><span class="product-card__tag" data-content-en="{{ $product->market }}" data-content-id="{{ $product->market_id ?: $product->market }}">{{ $product->market }}</span></div>
             </button>
@@ -669,13 +635,10 @@
       <div class="product-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
         <button class="product-modal__close" id="productModalClose" type="button" aria-label="Close product details">&times;</button>
         <div class="product-modal__media">
-          <div class="product-modal__track" id="productModalTrack" aria-label="Product photo gallery">
-            <div class="product-modal__slide"><img id="productModalImage" src="" alt=""></div>
-            <div class="product-modal__slide"><img id="productModalImageAlt" src="" alt=""></div>
-          </div>
-          <div class="product-modal__controls" aria-label="Photo controls">
+          <div class="product-modal__track" id="productModalTrack" aria-label="Product photo gallery"></div>
+          <div class="product-modal__controls" id="productModalControls" aria-label="Photo controls">
             <button class="product-modal__control" id="productModalPrev" type="button" aria-label="Previous photo">&#8592;</button>
-            <span class="product-modal__count" id="productModalCount" aria-live="polite">1 / 2</span>
+            <span class="product-modal__count" id="productModalCount" aria-live="polite">1 / 1</span>
             <button class="product-modal__control" id="productModalNext" type="button" aria-label="Next photo">&#8594;</button>
           </div>
         </div>
@@ -802,24 +765,6 @@
 
   <script>
     (() => {
-      const loader = document.getElementById('loader');
-      const number = document.getElementById('loaderNumber');
-      const bar = document.getElementById('loaderBar');
-      let progress = 0;
-      const tick = setInterval(() => {
-        progress += Math.max(1, Math.round((100 - progress) * .12));
-        progress = Math.min(progress, 100);
-        number.textContent = progress + '%';
-        bar.style.width = progress + '%';
-        if (progress >= 100) {
-          clearInterval(tick);
-          setTimeout(() => {
-            loader.classList.add('is-hidden');
-            document.body.classList.remove('is-loading');
-          }, 350);
-        }
-      }, 55);
-
       const header = document.getElementById('header');
       const menuBtn = document.getElementById('menuBtn');
       const navLinks = document.getElementById('navLinks');
@@ -908,8 +853,7 @@
       const productModal = document.getElementById('productModal');
       const productModalClose = document.getElementById('productModalClose');
       const productModalTrack = document.getElementById('productModalTrack');
-      const productModalImage = document.getElementById('productModalImage');
-      const productModalImageAlt = document.getElementById('productModalImageAlt');
+      const productModalControls = document.getElementById('productModalControls');
       const productModalPrev = document.getElementById('productModalPrev');
       const productModalNext = document.getElementById('productModalNext');
       const productModalCount = document.getElementById('productModalCount');
@@ -920,16 +864,17 @@
       const productInterest = document.getElementById('productInterest');
       let activeProductCard = null;
       let currentProductSlide = 0;
+      let productSlideCount = 1;
       let dragStartX = 0;
       let dragStartScroll = 0;
 
       const updateProductSlide = index => {
-        currentProductSlide = Math.max(0, Math.min(1, index));
-        productModalCount.textContent = `${currentProductSlide + 1} / 2`;
+        currentProductSlide = Math.max(0, Math.min(productSlideCount - 1, index));
+        productModalCount.textContent = `${currentProductSlide + 1} / ${productSlideCount}`;
       };
 
       const goToProductSlide = index => {
-        const nextIndex = (index + 2) % 2;
+        const nextIndex = (index + productSlideCount) % productSlideCount;
         productModalTrack.scrollTo({ left: nextIndex * productModalTrack.clientWidth, behavior: 'smooth' });
         updateProductSlide(nextIndex);
       };
@@ -943,10 +888,25 @@
       document.querySelectorAll('.product-card').forEach(card => card.addEventListener('click', () => {
         activeProductCard = card;
         const cardImage = card.querySelector('img');
-        productModalImage.src = cardImage.currentSrc || cardImage.src;
-        productModalImage.alt = cardImage.alt;
-        productModalImageAlt.src = card.dataset.galleryAlt;
-        productModalImageAlt.alt = `${card.querySelector('h3').textContent} detail view`;
+        let galleryImages = [];
+        try { galleryImages = JSON.parse(atob(card.dataset.galleryImages)); } catch (_) {}
+        galleryImages[0] = cardImage.currentSrc || cardImage.src;
+        galleryImages = [...new Set(galleryImages.filter(Boolean))];
+        productSlideCount = Math.max(1, galleryImages.length);
+        productModalTrack.replaceChildren(...galleryImages.map((source, index) => {
+          const slide = document.createElement('div');
+          slide.className = 'product-modal__slide';
+          const image = document.createElement('img');
+          image.src = source;
+          image.alt = `${card.querySelector('h3').textContent} - photo ${index + 1}`;
+          image.loading = index === 0 ? 'eager' : 'lazy';
+          image.addEventListener('error', () => {
+            if (image.src !== card.dataset.galleryFallback) image.src = card.dataset.galleryFallback;
+          }, { once: true });
+          slide.append(image);
+          return slide;
+        }));
+        productModalControls.hidden = productSlideCount < 2;
         productModalTitle.textContent = card.querySelector('h3').textContent;
         productModalText.textContent = card.dataset[currentLanguage === 'id' ? 'descriptionId' : 'descriptionEn'] || card.querySelector('p').textContent;
         productModalTag.textContent = card.querySelector('.product-card__tag').textContent;

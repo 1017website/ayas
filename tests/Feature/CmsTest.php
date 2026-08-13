@@ -4,11 +4,14 @@ namespace Tests\Feature;
 
 use App\Models\PageView;
 use App\Models\Post;
+use App\Models\Product;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class CmsTest extends TestCase
@@ -46,14 +49,41 @@ class CmsTest extends TestCase
 
     public function test_admin_can_create_product(): void
     {
+        Storage::fake('public');
         $user = User::factory()->create();
         $this->actingAs($user)->post('/admin/produk', [
             'name' => 'New Product', 'name_id' => 'Produk Baru', 'market' => 'Domestic', 'market_id' => 'Domestik',
             'short_description' => 'Product description', 'short_description_id' => 'Deskripsi produk',
             'description' => 'Detail', 'description_id' => 'Detail produk',
+            'gallery_image' => UploadedFile::fake()->image('gallery-2.jpg'),
+            'gallery_image_3' => UploadedFile::fake()->image('gallery-3.jpg'),
+            'gallery_image_4' => UploadedFile::fake()->image('gallery-4.jpg'),
             'sort_order' => 1, 'is_active' => 1,
         ])->assertRedirect('/admin/produk');
         $this->assertDatabaseHas('products', ['slug' => 'new-product', 'name_id' => 'Produk Baru', 'is_active' => true]);
+        $product = Product::where('slug', 'new-product')->firstOrFail();
+        Storage::disk('public')->assertExists($product->gallery_image);
+        Storage::disk('public')->assertExists($product->gallery_image_3);
+        Storage::disk('public')->assertExists($product->gallery_image_4);
+    }
+
+    public function test_product_grid_adapts_when_more_than_four_products_are_active(): void
+    {
+        foreach (range(1, 5) as $number) {
+            Product::create([
+                'name' => 'Product '.$number,
+                'name_id' => 'Produk '.$number,
+                'slug' => 'product-'.$number,
+                'market' => 'Domestic',
+                'market_id' => 'Domestik',
+                'short_description' => 'Description '.$number,
+                'short_description_id' => 'Deskripsi '.$number,
+                'sort_order' => $number,
+                'is_active' => true,
+            ]);
+        }
+
+        $this->get('/')->assertOk()->assertSee('product-grid product-grid--extended', false);
     }
 
     public function test_all_primary_admin_pages_render(): void
