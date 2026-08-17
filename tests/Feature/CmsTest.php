@@ -32,6 +32,54 @@ class CmsTest extends TestCase
         $this->actingAs($user)->get('/admin')->assertOk()->assertSee('Ringkasan hari ini');
     }
 
+    public function test_cms_roles_enforce_the_requested_access_matrix(): void
+    {
+        $headAdmin = User::factory()->create(['role' => User::ROLE_HEAD_ADMIN]);
+        $adminTeam = User::factory()->create(['role' => User::ROLE_ADMIN_TEAM]);
+        $contributor = User::factory()->create(['role' => User::ROLE_CONTRIBUTOR]);
+
+        foreach (['/admin', '/admin/produk', '/admin/berita', '/admin/pengaturan', '/admin/pesan', '/admin/statistik', '/admin/pengguna', '/admin/akun'] as $url) {
+            $this->actingAs($headAdmin)->get($url)->assertOk();
+        }
+
+        foreach (['/admin', '/admin/produk', '/admin/berita', '/admin/pengaturan'] as $url) {
+            $this->actingAs($adminTeam)->get($url)->assertOk();
+        }
+        foreach (['/admin/pesan', '/admin/statistik', '/admin/pengguna', '/admin/akun'] as $url) {
+            $this->actingAs($adminTeam)->get($url)->assertForbidden();
+        }
+
+        foreach (['/admin', '/admin/berita', '/admin/berita/create'] as $url) {
+            $this->actingAs($contributor)->get($url)->assertOk();
+        }
+        foreach (['/admin/produk', '/admin/pengaturan', '/admin/pesan', '/admin/statistik', '/admin/pengguna', '/admin/akun'] as $url) {
+            $this->actingAs($contributor)->get($url)->assertForbidden();
+        }
+    }
+
+    public function test_head_admin_can_manage_users_and_reset_their_password(): void
+    {
+        $headAdmin = User::factory()->create(['role' => User::ROLE_HEAD_ADMIN]);
+
+        $this->actingAs($headAdmin)->post('/admin/pengguna', [
+            'name' => 'Kontributor Berita',
+            'email' => 'kontributor@example.com',
+            'role' => User::ROLE_CONTRIBUTOR,
+            'password' => 'InitialPass1',
+            'password_confirmation' => 'InitialPass1',
+        ])->assertRedirect()->assertSessionHas('success');
+
+        $contributor = User::where('email', 'kontributor@example.com')->firstOrFail();
+        $this->assertSame(User::ROLE_CONTRIBUTOR, $contributor->role);
+
+        $this->actingAs($headAdmin)->put('/admin/pengguna/'.$contributor->id.'/password', [
+            'password' => 'UpdatedPass2',
+            'password_confirmation' => 'UpdatedPass2',
+        ])->assertRedirect()->assertSessionHas('success');
+
+        $this->assertTrue(Hash::check('UpdatedPass2', $contributor->fresh()->password));
+    }
+
     public function test_visitor_can_send_an_inquiry(): void
     {
         $this->post('/hubungi-kami', [

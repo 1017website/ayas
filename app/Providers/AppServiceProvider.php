@@ -22,7 +22,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('admin.*', function ($view) {
-            $view->with('sidebarNewCount', Inquiry::query()->where('status', 'new')->count());
+            $view->with(
+                'sidebarNewCount',
+                request()->user()?->isHeadAdmin() ? Inquiry::query()->where('status', 'new')->count() : 0
+            );
         });
     }
 }

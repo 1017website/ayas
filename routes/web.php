@@ -9,9 +9,11 @@ use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\QontakWebhookController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Middleware\TrackPageView;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteController::class, 'index'])->middleware(TrackPageView::class)->name('home');
@@ -28,21 +30,36 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
         Route::get('/', DashboardController::class)->name('dashboard');
-        Route::get('/statistik', AnalyticsController::class)->name('analytics');
-        Route::get('/pengaturan', [SettingController::class, 'edit'])->name('settings.edit');
-        Route::put('/pengaturan', [SettingController::class, 'update'])->name('settings.update');
-        Route::get('/akun', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/akun/password', [ProfileController::class, 'password'])->name('profile.password');
+
+        Route::middleware('role:'.User::ROLE_HEAD_ADMIN.','.User::ROLE_ADMIN_TEAM.','.User::ROLE_CONTRIBUTOR)->group(function () {
+            Route::resource('berita', AdminPostController::class)->parameters(['berita' => 'post']);
+        });
+
+        Route::middleware('role:'.User::ROLE_HEAD_ADMIN.','.User::ROLE_ADMIN_TEAM)->group(function () {
+            Route::resource('produk', AdminProductController::class)->parameters(['produk' => 'product']);
+            Route::get('/pengaturan', [SettingController::class, 'edit'])->name('settings.edit');
+            Route::put('/pengaturan', [SettingController::class, 'update'])->name('settings.update');
+        });
+
+        Route::middleware('role:'.User::ROLE_HEAD_ADMIN)->group(function () {
+            Route::get('/statistik', AnalyticsController::class)->name('analytics');
+            Route::get('/akun', [ProfileController::class, 'edit'])->name('profile.edit');
+            Route::put('/akun/password', [ProfileController::class, 'password'])->name('profile.password');
+            Route::get('/pengguna', [UserController::class, 'index'])->name('users.index');
+            Route::post('/pengguna', [UserController::class, 'store'])->name('users.store');
+            Route::put('/pengguna/{user}', [UserController::class, 'update'])->name('users.update');
+            Route::put('/pengguna/{user}/password', [UserController::class, 'password'])->name('users.password');
+            Route::delete('/pengguna/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+            Route::get('/pesan', [AdminInquiryController::class, 'index'])->name('inquiries.index');
+            Route::get('/pesan/{inquiry}', [AdminInquiryController::class, 'show'])->name('inquiries.show');
+            Route::patch('/pesan/{inquiry}', [AdminInquiryController::class, 'update'])->name('inquiries.update');
+            Route::post('/pesan/{inquiry}/qontak', [AdminInquiryController::class, 'qontak'])->name('inquiries.qontak');
+            Route::delete('/pesan/{inquiry}', [AdminInquiryController::class, 'destroy'])->name('inquiries.destroy');
+        });
+
         Route::middleware('developer')->group(function () {
             Route::get('/developer', [DeveloperToolController::class, 'index'])->name('developer.index');
             Route::post('/developer/run', [DeveloperToolController::class, 'run'])->middleware('throttle:6,1')->name('developer.run');
         });
-        Route::resource('produk', AdminProductController::class)->parameters(['produk' => 'product']);
-        Route::resource('berita', AdminPostController::class)->parameters(['berita' => 'post']);
-        Route::get('/pesan', [AdminInquiryController::class, 'index'])->name('inquiries.index');
-        Route::get('/pesan/{inquiry}', [AdminInquiryController::class, 'show'])->name('inquiries.show');
-        Route::patch('/pesan/{inquiry}', [AdminInquiryController::class, 'update'])->name('inquiries.update');
-        Route::post('/pesan/{inquiry}/qontak', [AdminInquiryController::class, 'qontak'])->name('inquiries.qontak');
-        Route::delete('/pesan/{inquiry}', [AdminInquiryController::class, 'destroy'])->name('inquiries.destroy');
     });
 });

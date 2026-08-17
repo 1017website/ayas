@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::firstOrCreate(['email' => 'admin@ayasfoodlink.co.id'], ['name' => 'Administrator AYAS', 'password' => Hash::make('admin12345')]);
+        User::firstOrCreate(['email' => 'admin@ayasfoodlink.co.id'], ['name' => 'Administrator AYAS', 'role' => User::ROLE_HEAD_ADMIN, 'password' => Hash::make('admin12345')]);
 
         foreach (config('ayas.content_sections') as $fields) {
             foreach ($fields as $key => $field) {

@@ -1,12 +1,12 @@
 @extends('admin.layouts.app')
-@section('title',$post->exists?'Edit Berita':'Buat Berita')
-@section('header',$post->exists?'Edit berita':'Buat berita')
+@section('title',$post->exists?'Edit Berita / Event':'Buat Berita / Event')
+@section('header',$post->exists?'Edit berita / event':'Buat berita / event')
 @section('content')
-<div class="page-head"><div><a class="back-link" href="{{ route('admin.berita.index') }}">← Kembali ke berita</a><h1>{{ $post->exists?'Perbarui berita':'Tulis cerita baru' }}</h1><p>Seluruh isi halaman detail tersedia dalam English dan Indonesia.</p></div></div>
+<div class="page-head"><div><a class="back-link" href="{{ route('admin.berita.index') }}">← Kembali ke berita & event</a><h1>{{ $post->exists?'Perbarui berita / event':'Tulis konten baru' }}</h1><p>Gunakan kategori “Event” untuk agenda/kegiatan. Seluruh isi tersedia dalam English dan Indonesia.</p></div></div>
 <form class="editor-layout" method="post" enctype="multipart/form-data" action="{{ $post->exists?route('admin.berita.update',$post):route('admin.berita.store') }}">@csrf @if($post->exists)@method('PUT')@endif
   <div class="editor-main">
     <section class="admin-card"><div class="form-section-title"><span>01</span><div><h3>Isi berita bilingual</h3><p>Judul, kategori, ringkasan, dan isi utama halaman.</p></div></div><div class="bilingual-head"><span>Konten</span><b>EN · English</b><b>ID · Indonesia</b></div><div class="bilingual-fields">
-      @foreach([['title','title_id','Judul',false,2],['category','category_id','Kategori',false,2],['excerpt','excerpt_id','Ringkasan',true,3],['body','body_id','Isi berita',true,12]] as [$en,$id,$label,$area,$rows])<div class="bilingual-row"><label><b>{{ $label }}</b><small>{{ $en }}</small></label>@if($area)<textarea name="{{ $en }}" rows="{{ $rows }}" required>{{ old($en,$post->$en) }}</textarea><textarea name="{{ $id }}" rows="{{ $rows }}" required>{{ old($id,$post->$id) }}</textarea>@else<input name="{{ $en }}" value="{{ old($en,$post->$en) }}" required><input name="{{ $id }}" value="{{ old($id,$post->$id) }}" required>@endif</div>@endforeach
+      @foreach([['title','title_id','Judul',false,2],['category','category_id','Kategori (contoh: News / Event)',false,2],['excerpt','excerpt_id','Ringkasan',true,3],['body','body_id','Isi konten',true,12]] as [$en,$id,$label,$area,$rows])<div class="bilingual-row"><label><b>{{ $label }}</b><small>{{ $en }}</small></label>@if($area)<textarea name="{{ $en }}" rows="{{ $rows }}" required>{{ old($en,$post->$en) }}</textarea><textarea name="{{ $id }}" rows="{{ $rows }}" required>{{ old($id,$post->$id) }}</textarea>@else<input name="{{ $en }}" value="{{ old($en,$post->$en) }}" required><input name="{{ $id }}" value="{{ old($id,$post->$id) }}" required>@endif</div>@endforeach
     </div><div class="fields product-extra"><label>Tanggal tayang<input type="datetime-local" name="published_at" value="{{ old('published_at',$post->published_at?->format('Y-m-d\TH:i')) }}"></label></div></section>
 
     <section class="admin-card"><div class="form-section-title"><span>02</span><div><h3>Caption galeri bilingual</h3><p>Tiga caption ini tampil di galeri dan lightbox berita.</p></div></div><div class="bilingual-head"><span>Foto</span><b>EN · English</b><b>ID · Indonesia</b></div><div class="bilingual-fields">

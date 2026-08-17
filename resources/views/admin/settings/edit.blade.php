@@ -8,7 +8,7 @@
 
 <form class="admin-form settings-form" method="post" enctype="multipart/form-data" action="{{ route('admin.settings.update') }}">@csrf @method('PUT')
   <nav class="section-jump settings-tabs" role="tablist" aria-label="Kelompok pengaturan website">
-    <a href="#media" role="tab" data-settings-tab="media" aria-controls="media">Media</a><a href="#detail" role="tab" data-settings-tab="detail" aria-controls="detail">Informasi Umum</a><a href="#seo" role="tab" data-settings-tab="seo" aria-controls="seo">SEO & Meta</a><a href="#tracking" role="tab" data-settings-tab="tracking" aria-controls="tracking">Meta & Google Ads</a><a href="#qontak" role="tab" data-settings-tab="qontak" aria-controls="qontak">Mekari Qontak</a>
+    <a href="#media" role="tab" data-settings-tab="media" aria-controls="media">Media</a><a href="#detail" role="tab" data-settings-tab="detail" aria-controls="detail">Informasi Umum</a><a href="#seo" role="tab" data-settings-tab="seo" aria-controls="seo">SEO & Meta</a>@if(auth()->user()->isHeadAdmin())<a href="#tracking" role="tab" data-settings-tab="tracking" aria-controls="tracking">Meta & Google Ads</a><a href="#qontak" role="tab" data-settings-tab="qontak" aria-controls="qontak">Mekari Qontak</a>@endif
     @foreach($contentSections as $section => $fields)@php($tabId='section-'.Str::slug($section))<a href="#{{ $tabId }}" role="tab" data-settings-tab="{{ $tabId }}" aria-controls="{{ $tabId }}">{{ $section }}</a>@endforeach
   </nav>
 
@@ -34,6 +34,7 @@
     </label>@endforeach
   </div></section>
 
+  @if(auth()->user()->isHeadAdmin())
   <section class="admin-card" id="tracking" role="tabpanel" data-settings-panel><div class="form-section-title"><span>ADS</span><div><h3>Meta Pixel, Google Analytics, Tag Manager & Ads</h3><p>Kosongkan layanan yang tidak digunakan. Event prospek otomatis dikirim ketika formulir WhatsApp atau email digunakan.</p></div></div><div class="fields">
     @foreach($trackingFields as $key => $field)<label>{{ $field['label'] }}<input name="tracking[{{ $key }}]" value="{{ old('tracking.'.$key,$settings[$key]??$field['default']) }}" placeholder="{{ $field['placeholder']??'' }}">@if($field['help']??false)<small>{{ $field['help'] }}</small>@endif</label>@endforeach
   </div><div class="content-editor-help tracking-help"><span>Info</span><p>Statistik internal CMS tetap berjalan meski ID Google belum diisi. Jika memakai GTM, konfigurasi tag di akun Tag Manager Anda.</p></div></section>
@@ -46,6 +47,7 @@
     @endforeach</div>
     <div class="webhook-box"><b>Webhook penerimaan event</b><code>{{ route('webhooks.qontak') }}?secret=WEBHOOK_SECRET_ANDA</code><small>Daftarkan URL ini di Mekari Qontak dan ganti bagian WEBHOOK_SECRET_ANDA dengan secret yang sama.</small></div>
   </section>
+  @endif
 
   @foreach($contentSections as $section => $fields)
     <section class="admin-card bilingual-section" id="section-{{ Str::slug($section) }}" role="tabpanel" data-settings-panel><div class="form-section-title"><span>{{ str_pad($loop->iteration+1,2,'0',STR_PAD_LEFT) }}</span><div><h3>{{ $section }}</h3><p>Edit kedua bahasa. Perubahan langsung mengikuti tombol ID/EN di frontend.</p></div></div>

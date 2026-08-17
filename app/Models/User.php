@@ -10,6 +10,12 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    public const ROLE_HEAD_ADMIN = 'head_admin';
+
+    public const ROLE_ADMIN_TEAM = 'admin_team';
+
+    public const ROLE_CONTRIBUTOR = 'contributor';
+
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
@@ -21,6 +27,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'role',
         'password',
     ];
 
@@ -50,5 +57,34 @@ class User extends Authenticatable
     public function isDeveloper(): bool
     {
         return strcasecmp($this->email, (string) config('ayas.developer_email')) === 0;
+    }
+
+    public static function roles(): array
+    {
+        return [
+            self::ROLE_HEAD_ADMIN => 'Ketua Admin',
+            self::ROLE_ADMIN_TEAM => 'Tim Admin',
+            self::ROLE_CONTRIBUTOR => 'Kontributor',
+        ];
+    }
+
+    public function roleLabel(): string
+    {
+        return self::roles()[$this->role] ?? 'Tanpa Role';
+    }
+
+    public function isHeadAdmin(): bool
+    {
+        return $this->role === self::ROLE_HEAD_ADMIN;
+    }
+
+    public function canEditWebsite(): bool
+    {
+        return in_array($this->role, [self::ROLE_HEAD_ADMIN, self::ROLE_ADMIN_TEAM], true);
+    }
+
+    public function canEditPosts(): bool
+    {
+        return in_array($this->role, array_keys(self::roles()), true);
     }
 }

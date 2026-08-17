@@ -13,15 +13,18 @@ class DashboardController extends Controller
 {
     public function __invoke(): View
     {
+        $canViewManagementData = request()->user()->isHeadAdmin();
+
         return view('admin.dashboard', [
             'stats' => [
                 'products' => Product::count(),
                 'posts' => Post::count(),
-                'newInquiries' => Inquiry::where('status', 'new')->count(),
                 'published' => Post::where('is_published', true)->count(),
-                'viewsToday' => PageView::whereDate('viewed_at', today())->count(),
+                'newInquiries' => $canViewManagementData ? Inquiry::where('status', 'new')->count() : null,
+                'viewsToday' => $canViewManagementData ? PageView::whereDate('viewed_at', today())->count() : null,
             ],
-            'inquiries' => Inquiry::latest()->take(5)->get(),
+            'canViewManagementData' => $canViewManagementData,
+            'inquiries' => $canViewManagementData ? Inquiry::latest()->take(5)->get() : collect(),
             'posts' => Post::latest()->take(4)->get(),
         ]);
     }

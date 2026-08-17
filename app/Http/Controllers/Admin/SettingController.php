@@ -56,24 +56,27 @@ class SettingController extends Controller
             }
         }
 
-        foreach (['seo', 'tracking'] as $group) {
+        $settingGroups = $request->user()->isHeadAdmin() ? ['seo', 'tracking'] : ['seo'];
+        foreach ($settingGroups as $group) {
             foreach (array_keys(config("ayas.{$group}")) as $key) {
                 Setting::updateOrCreate(['key' => $key], ['value' => $request->input("{$group}.{$key}", '')]);
             }
         }
 
-        foreach (config('ayas.qontak') as $key => $field) {
-            if (($field['type'] ?? null) === 'checkbox') {
-                Setting::updateOrCreate(['key' => $key], ['value' => $request->boolean("qontak.{$key}") ? '1' : '0']);
+        if ($request->user()->isHeadAdmin()) {
+            foreach (config('ayas.qontak') as $key => $field) {
+                if (($field['type'] ?? null) === 'checkbox') {
+                    Setting::updateOrCreate(['key' => $key], ['value' => $request->boolean("qontak.{$key}") ? '1' : '0']);
 
-                continue;
-            }
+                    continue;
+                }
 
-            $value = $request->input("qontak.{$key}");
-            if (($field['secret'] ?? false) && blank($value)) {
-                continue;
+                $value = $request->input("qontak.{$key}");
+                if (($field['secret'] ?? false) && blank($value)) {
+                    continue;
+                }
+                Setting::updateOrCreate(['key' => $key], ['value' => ($field['secret'] ?? false) ? Crypt::encryptString($value) : $value]);
             }
-            Setting::updateOrCreate(['key' => $key], ['value' => ($field['secret'] ?? false) ? Crypt::encryptString($value) : $value]);
         }
 
         foreach (array_keys(config('ayas.media')) as $key) {
